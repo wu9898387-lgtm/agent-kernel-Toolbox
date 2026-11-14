@@ -26,7 +26,7 @@ Agent-Kernel-Toolbox 将不同系统和分析后端封装为固定范围的 MCP 
 | Python 实现 | `runtime-access.pyz`，内含 49 个 Python 源文件 |
 | 附带示例 | 13 个跨平台可重定位对象文件及清单 |
 | 原生组件 | C、Rust、Go、Java 源码与按需构建入口 |
-| 许可证（本次拟更新） | [Permissive Attribution and Notice License (PANL) 1.0](LICENSE)；原 ZIP 仍包含 AGPL-3.0-only 的历史声明，正式发布前须统一 |
+| 项目许可证 | [Permissive Attribution and Notice License (PANL) 1.0](LICENSE)；包内自有组件的许可标记已同步更新，第三方依赖仍适用各自许可证 |
 
 **能力边界：** 工具存在于目录中，只代表代码提供了相应入口；实际调用还依赖操作系统、目标程序、设备、配置权限及外部后端。安装检查通过也不表示所有功能都在当前设备上完成了实测。
 
@@ -360,9 +360,9 @@ python3 build-source.py --output /absolute/new/Agent-Kernel-Toolbox-rebuilt.zip
 python3 verify-runtime.py /absolute/new/Agent-Kernel-Toolbox-rebuilt.zip
 ```
 
-`build-runtime.py` 维护显式打包清单；构建过程会重新生成 `runtime-access.pyz` 和 `CONTENTS.json`。**替换发行包中的 README.md 或 LICENSE，会让旧 `CONTENTS.json` 的文件摘要失效**。因此，更新文档或许可证后必须重新打包，并对新包重复安装与一致性检查；不要通过关闭校验来处理差异。**本次提供的 README.md 与 LICENSE 是待并入项目的更新文件，不能视为原 ZIP 已同步换证。**
+`build-runtime.py` 维护显式打包清单；构建过程会重新生成 `runtime-access.pyz` 和 `CONTENTS.json`。**替换发行包中的 README.md 或 LICENSE，会让旧 `CONTENTS.json` 的文件摘要失效**。因此，更新文档或许可证后必须重新打包，并对新包重复安装与一致性检查；不要通过关闭校验来处理差异。**本次更新已同步包内 README.md、LICENSE、项目组件元数据及 CONTENTS.json，并执行发行包一致性检查。**
 
-如确实要发布 `0.5.6.3`，还必须先确认该版本的真实改动，并同步运行时版本、`runtime-manifest.json`、MCP 文档、浏览器扩展、npm/Cargo 元数据及其他发布标识。**修改 ZIP 文件名或 README 标题不会升级二进制版本。** 另外，采用 PANL 1.0 发布前应在有权决定许可的前提下，同步仓库根目录 `LICENSE`、`browser/package.json`、`native/runtime-agent/Cargo.toml` 及其他版权/许可声明；当前归档仍包含 `AGPL-3.0-only` 标识，不能仅靠修改 README 视为完成许可证切换。发行流程见 [PACKAGING.md](PACKAGING.md)。
+如确实要发布 `0.5.6.3`，还必须先确认该版本的真实改动，并同步运行时版本、`runtime-manifest.json`、MCP 文档、浏览器扩展、npm/Cargo 元数据及其他发布标识。**修改 ZIP 文件名或 README 标题不会升级二进制版本。** 本次已更新包内自有组件的许可声明；**第三方依赖（包括可选的 `@jshookmcp/jshook`）可能仍受 AGPL 或其他许可证约束，不得删除其许可信息**。许可证变更还须由拥有相应版权和再许可权的主体确认；发布流程见 [PACKAGING.md](PACKAGING.md)。
 
 ## 目录与文档
 
@@ -370,7 +370,7 @@ python3 verify-runtime.py /absolute/new/Agent-Kernel-Toolbox-rebuilt.zip
 Agent-Kernel-Toolbox/
 ├── runtime-access.pyz            # Python 运行时 / MCP 入口
 ├── runtime-manifest.json         # 运行时身份、能力与打包元数据
-├── LICENSE                       # PANL 1.0 许可证（拟替换的新版）
+├── LICENSE                       # PANL 1.0 许可证
 ├── CONTENTS.json                 # 包文件 / 内嵌 Python 摘要清单
 ├── verify-runtime.py             # ZIP / 目录完整性验证
 ├── mcp-client.example.json       # MCP 客户端配置示例
@@ -409,7 +409,7 @@ Agent-Kernel-Toolbox/
 
 ## 许可证
 
-拟采用 [**Permissive Attribution and Notice License (PANL) 1.0**](LICENSE)。完整、具有约束力的英文条款请以同目录 `LICENSE` 为准。以下是便于阅读的中文概要，不替代许可证原文：
+本包根目录提供 [**Permissive Attribution and Notice License (PANL) 1.0**](LICENSE)。完整、具有约束力的英文条款请以同目录 `LICENSE` 为准。以下是便于阅读的中文概要，不替代许可证原文：
 
 - **允许的使用方式：** 免费使用、复制、修改、合并、发布、分发、再许可和销售；允许商业用途和专有/闭源项目，无需公开衍生代码。
 - **署名与保留：** 在副本和衍生作品中保留原版权声明、作者/组织署名和 PANL 1.0 全文；闭源发行应在随附文档、法律声明或可访问的许可证/关于页面展示署名。
@@ -419,6 +419,6 @@ Agent-Kernel-Toolbox/
 
 **发布前仍需填写：** `LICENSE` 中的 `[YEAR]` 与 `[COPYRIGHT HOLDER / ORGANIZATION]` 仍为占位符；**通知邮箱已设置为 `wuOO364@gmail.com`**。发布到公共仓库后，该邮箱会公开显示在许可证和 README 中。
 
-**现有发行包状态：** 上传的 `Agent-Kernel-Toolbox-0.5.6.3.zip` 内仍附有 AGPL v3 许可证文件，`browser/package.json` 和 `native/runtime-agent/Cargo.toml` 仍声明 `AGPL-3.0-only`。因此，这里的 PANL 1.0 表示**拟更新的许可文本**；正式发布前需由有权许可的版权持有人确认授权，同步源文件/组件许可声明，并重新构建与校验发行包。不能通过 README 直接变更他人贡献或第三方依赖的许可证。Go 辅助组件的 [GO-LICENSE](native/worker/GO-LICENSE) 和 [GO-PATENTS](native/worker/GO-PATENTS) 以及其他第三方依赖许可证仍需分别保留和遵守。
+**当前修订包状态：** 根目录原 AGPL v3 许可证全文已替换为 PANL 1.0，并更新自有浏览器、Rust 和反向分析适配器的许可标记及其锁定文件。仍须由有权许可的版权持有人确认此许可证变更。**第三方依赖的许可证不受该变更影响**：`tools/reverse_mcp/package-lock.json` 中可选上游 `@jshookmcp/jshook` 等依赖仍带有 AGPL 声明，必须分别遵守；Go 辅助组件的 [GO-LICENSE](native/worker/GO-LICENSE) 和 [GO-PATENTS](native/worker/GO-PATENTS) 也必须保留。
 
 PANL 1.0 为自定义许可证名称。若项目工具需要 SPDX 表达式，可考虑以 `LicenseRef-PANL-1.0` **作为自定义引用**并随附许可证全文；不要把它当作已收录的标准 SPDX 标识。
