@@ -8,13 +8,13 @@
 
 ## 当前版本
 
-[下载 Agent-Kernel-Toolbox 0.5.7.2 Runtime](Agent-Kernel-Toolbox-0.5.7.2-runtime.zip)
+[下载 Agent-Kernel-Toolbox 0.6.2 Runtime](Agent-Kernel-Toolbox-0.6.2-runtime.zip)
 
 | 项目 | 当前发行包 |
 | --- | --- |
-| 运行时版本 | `0.5.7.2` |
-| 工具目录 | 214 项工具、53 个工具族 |
-| Python 实现 | `runtime-access.pyz`，内含 65 个 Python 源文件 |
+| 运行时版本 | `0.6.2` |
+| 工具目录 | 223 项工具、55 个工具族 |
+| Python 实现 | `runtime-access.pyz`，内含 74 个 Python 源文件 |
 | MCP 传输 | 本地子进程 `stdio`，逐行 JSON-RPC 2.0 |
 | MCP 协议 | `2025-11-25`、`2025-06-18` |
 | 基础环境 | Python 3.10+，原生能力依赖宿主平台和实际配置 |
@@ -25,13 +25,13 @@
 解压并核对 ZIP 内容及 MCP 连接
 
 ```bash
-unzip Agent-Kernel-Toolbox-0.5.7.2-runtime.zip -d Agent-Kernel-Toolbox
+unzip Agent-Kernel-Toolbox-0.6.2-runtime.zip -d Agent-Kernel-Toolbox
 cd Agent-Kernel-Toolbox
-python3 verify-runtime.py ../Agent-Kernel-Toolbox-0.5.7.2-runtime.zip
+python3 verify-runtime.py ../Agent-Kernel-Toolbox-0.6.2-runtime.zip
 python3 tools/check_installation.py --mcp
 ```
 
-安装检查覆盖归档、运行时元数据、工具目录和两个协议版本的临时只读握手。浏览器、原生进程、远程设备和可选分析后端需要按配置分别验证
+安装检查覆盖归档、运行时元数据、工具目录和两个协议版本的真实 stdio 调用，覆盖快照、离线回放和纯整数 IR。浏览器、原生进程、远程设备和可选分析后端需按配置分别验证
 
 创建诊断配置和 MCP 客户端条目。将以下路径换成当前用户控制的实际绝对路径，并为本次配置选择独立的状态目录
 
@@ -45,7 +45,22 @@ python3 tools/configure_runtime.py \
 
 将生成的条目添加到支持本地 stdio MCP 的客户端。运行时按固定配置公开工具、进程、设备和来源。客户端调用时使用 `tools/list` 返回的参数定义
 
-## 0.5.7.2 变更
+## 0.6.2 变更
+
+- 取消排队的读请求会立即释放队列名额。超长消息在有界读取内找到帧边界时，同一连接可继续处理请求。
+- 短窗口和空窗口可沿用同一分块参数。已结束的回放复用原检查点，无需分配新槽位。
+- 未注册目标或启动前无法解析的可执行文件会返回明确的未派发结果。可执行文件恢复后可以重试。
+- 平台工具可读取完整运行时配置，编译沿用原配置的状态目录和授权。安装命令支持从当前目录解析相对配置路径。
+- 浏览器控件和输入框的观察凭证可并存。重叠隐藏在最后一个凭证释放后恢复。快照按响应大小截断，已关闭标签页释放名额。
+- 安装检查分别保留两个 MCP 协议的结果。报告写入失败和损坏压缩包均返回明确错误。
+
+发行包 SHA-256
+
+```text
+c752d5e7ef3c7dfd5b04cf2f0c72c411dfc4684d5918de04c130ca831b968902
+```
+
+## 历史版本 0.5.7.2
 
 - `process.detach` 释放附加会话及其资源，目标进程继续运行
 - 新启动的 owned 进程默认使用 `terminate_on_host_exit`，可通过固定 profile 选择 `preserve`
@@ -62,20 +77,19 @@ python3 tools/configure_runtime.py \
 
 ## 包内文档与重建
 
-- `RELEASE_NOTES.txt` 包含完整变更、配置项和迁移说明
 - `skills/agent-kernel-toolbox/SKILL.md` 描述客户端握手、调用、审计和资源关闭约定
 - `runtime-manifest.json` 记录实际版本、能力范围和组件入口
 - `tools/extract_sources.py --output src` 将内嵌 Python 源文件提取到尚不存在的目录
 - `build-runtime.py` 按清单重建 ZIP 并生成新的 `CONTENTS.json`
 
 ```bash
-python3 build-runtime.py --output ../Agent-Kernel-Toolbox-0.5.7.2-rebuilt.zip
-python3 verify-runtime.py ../Agent-Kernel-Toolbox-0.5.7.2-rebuilt.zip
+python3 build-runtime.py --output ../Agent-Kernel-Toolbox-0.6.2-rebuilt.zip
+python3 verify-runtime.py ../Agent-Kernel-Toolbox-0.6.2-rebuilt.zip
 ```
 
 ## 许可证
 
-仓库和发行包均提供 [**Permissive Attribution and Notice License (PANL) 1.0**](LICENSE)。完整、具有约束力的英文条款请以同目录 `LICENSE` 为准。以下是便于阅读的中文概要，不替代许可证原文：
+仓库提供 [**Permissive Attribution and Notice License (PANL) 1.0**](LICENSE)。完整、具有约束力的英文条款请以同目录 `LICENSE` 为准。以下是便于阅读的中文概要，不替代许可证原文：
 
 - **允许的使用方式：** 免费使用、复制、修改、合并、发布、分发、再许可和销售；允许商业用途和专有/闭源项目，无需公开衍生代码
 - **署名与保留：** 在副本和衍生作品中保留原版权声明、作者/组织署名和 PANL 1.0 全文；闭源发行应在随附文档、法律声明或可访问的许可证/关于页面展示署名
